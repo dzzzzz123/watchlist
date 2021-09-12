@@ -1,9 +1,8 @@
-from flask import Flask, escape, url_for, render_template
-from flask_sqlalchemy import SQLAlchemy
+import click
 import os
 import sys
-import click
-
+from flask import Flask, escape, url_for, render_template
+from flask_sqlalchemy import SQLAlchemy
 
 WIN = sys.platform.startswith('win')
 if WIN:  # 如果是 Windows 系统，使用三个斜线
@@ -15,15 +14,19 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = prefix + os.path.join(app.root_path, 'data.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db=SQLAlchemy(app)
+db = SQLAlchemy(app)
+
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20))
+
+
 class Movie(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title =db.Column(db.String(60))
+    title = db.Column(db.String(60))
     year = db.Column(db.String(4))
+
 
 @app.cli.command()
 @click.option('--drop', is_flag=True, help='Create after drop.')
@@ -39,8 +42,8 @@ def initdb(drop):
 @app.route('/index')
 def index():
     user = User.query.first()
-    movies =Movie.query.all()
-    return render_template('index.html', user=user, movies=movies)
+    movies = Movie.query.all()
+    return render_template('index.html', movies=movies)
 
 
 @app.cli.command()
@@ -60,15 +63,25 @@ def forge():
         {'title': 'The Pork of Music', 'year': '2012'},
     ]
 
-    user =User(name=name)
+    user = User(name=name)
     db.session.add(user)
     for m in movies:
-        movie=Movie(title=m['title'],year=m['year'])
+        movie = Movie(title=m['title'], year=m['year'])
         db.session.add(movie)
     db.session.commit()
     click.echo('Done!')
 
 
+@app.errorhandler(404)
+def page_not_found(e):
+    user = User.query.first()
+    return render_template('404.html'), 404
+
+
+@app.context_processor
+def inject_user():
+    user = User.query.first()
+    return dict(user=user)
 
 # @app.route('/user/<name>')
 # def user_page(name):
