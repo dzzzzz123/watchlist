@@ -2,14 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">ll>
+    </footer>
+</body>
+</html>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css">
 </head>
 <body>
-    <h2>{{ name }}'s Watchlist</h2>
+    <h2>{{ user.name }}'s Watchlist</h2>
     <h2>
         <img alt="Avatar" src="{{ url_for('static', filename='images/avatar.png') }}">
-        {{ name }}'s Watchlist
+        {{ user.name }}'s Watchlist
     </h2>
     <p>{{ movies|length }} Titles</p>
     <ul>
@@ -19,7 +22,4 @@
     </ul>
     <img alt="Walking Totoro" src="{{ url_for('static', filename='images/totoro.gif') }}">
     <footer>
-        <small>&copy; 2018 <a href="http://helloflask.com/tutorial">HelloFlask</a></small>
-    </footer>
-</body>
-</html>
+        <small>&copy; 2018 <a href="http://helloflask.com/tutorial">HelloFlask</a></sma
