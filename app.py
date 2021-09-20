@@ -1,6 +1,7 @@
-import click
 import os
 import sys
+
+import click
 from flask import Flask, escape, url_for, render_template, request, redirect, flash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, login_manager, current_user
 from flask_sqlalchemy import SQLAlchemy
@@ -101,8 +102,6 @@ def initdb(drop):
     click.echo('Initialized database.')
 
 
-# @app.route('/home')
-# @app.route('/index')
 @app.route('/', methods=['POST', 'GET'])
 def index():
     if request.method == 'POST':
